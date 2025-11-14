@@ -1,38 +1,40 @@
-name: Build WASM
+name: Build
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+  pull_request:
 
 jobs:
-  build-wasm:
+  build:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: .
-
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v5
 
-    - name: Setup Go
+    - name: Set up Go
       uses: actions/setup-go@v5
       with:
         go-version: '1.22'
 
-    - name: Tidy modules
-      run: go mod tidy
+    # ---------- BUILD CLI NATIVO ----------
+    - name: Build CLI (native)
+    - run: |
+        cd cli
+        go build -o homevision_unpacker_cli .
 
-    - name: Build WASM
+    # ---------- BUILD WASM ----------
+    - name: Build WASM frontend
       run: |
-        export GOOS=js
-        export GOARCH=wasm
-        go build -o frontend/main.wasm ./cli
+        cd cli
+        GOOS=js GOARCH=wasm go build \
+          -o ../frontend/main.wasm \
+          main.go parser.go
 
-    - name: Upload artifact
+    - name: Upload build artifacts
       uses: actions/upload-artifact@v5
       with:
-        name: wasm-artifact
-        path: frontend/main.wasm
+        name: builds
+        path: |
+          cli/homevision_unpacker_cli
+          frontend/main.wasm

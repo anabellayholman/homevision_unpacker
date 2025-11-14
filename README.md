@@ -11,7 +11,7 @@ Build and test (Linux / macOS / Windows with Go installed):
 cd cli
 go test ./...
 go run . sample.env
-
+ 
 Build WASM (optional):
 cd cli
 GOOS=js GOARCH=wasm go build -o ../frontend/main.wasm main.go parser.go

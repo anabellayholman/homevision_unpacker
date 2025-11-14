@@ -1,3 +1,3 @@
 module github.com/anabellayholman/homevision_unpacker
 
-go 1.21
+go 1.22

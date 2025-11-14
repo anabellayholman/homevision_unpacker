@@ -4,7 +4,7 @@ import (
 "fmt"
 "os"
 "path/filepath"
-"github.com/anabellayholman/homevision_unpacker/cli"
+"github.com/anabellayholman/homevision_unpacker/pkg/cli"
 )
 
 func main() {

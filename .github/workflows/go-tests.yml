@@ -20,6 +20,4 @@ jobs:
           go-version: "1.21"
 
       - name: Run tests
-        run: |
-          cd cli
-          go test -v ./...
+        run: go test -v ./tests/...

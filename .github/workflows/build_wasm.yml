@@ -1,4 +1,4 @@
-name: Build WASM & CLI
+name: Build CLI & WASM
 
 on:
   push:
@@ -12,29 +12,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Set up Go
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.22'
 
-      # ---------- BUILD CLI NATIVO ----------
       - name: Build CLI (native)
         run: |
-          cd cli
-          go build -o homevision_unpacker_cli .
+          go build -o homevision_unpacker .
 
-      # ---------- BUILD WASM ----------
-      - name: Build WASM frontend
+      - name: Build WASM
         run: |
           cd cli
           GOOS=js GOARCH=wasm go build \
             -o ../frontend/main.wasm \
-            main.go parser.go
+            main.go  # SOLO este archivo, NO parser.go
 
-      - name: Upload build artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v5
         with:
           name: builds
           path: |
-            cli/homevision_unpacker_cli
+            homevision_unpacker
             frontend/main.wasm

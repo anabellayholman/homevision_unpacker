@@ -18,9 +18,17 @@ jobs:
       with:
         go-version: '1.22'
 
+    - name: Tidy modules
+      run: go mod tidy
+
     - name: Build WASM
       run: |
-        cd cli
         export GOOS=js
         export GOARCH=wasm
-        go build -o ../frontend/main.wasm main.go
+        go build -o frontend/main.wasm ./cmd/wasm
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: wasm-artifact
+        path: frontend/main.wasm

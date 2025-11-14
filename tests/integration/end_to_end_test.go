@@ -2,7 +2,7 @@ package integration
 
 import (
 "testing"
-cli "github.com/anabellayholman/homevision_unpacker/cli"
+cli "github.com/anabellayholman/homevision_unpacker/pkg/cli"
 )
 
 func TestIntegrationSampleEnv(t *testing.T) {

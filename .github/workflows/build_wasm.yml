@@ -1,4 +1,4 @@
-name: Build CLI & WASM
+name: Build WASM
 
 on:
   push:
@@ -17,21 +17,16 @@ jobs:
         with:
           go-version: '1.22'
 
-      - name: Build CLI (native)
-        run: |
-          go build -o homevision_unpacker .
+      - name: Create frontend directory
+        run: mkdir -p frontend
 
       - name: Build WASM
         run: |
           cd cli
-          GOOS=js GOARCH=wasm go build \
-            -o ../frontend/main.wasm \
-            main.go  # SOLO este archivo, NO parser.go
+          GOOS=js GOARCH=wasm go build -o ../frontend/main.wasm main.go
 
-      - name: Upload artifacts
+      - name: Upload WASM artifact
         uses: actions/upload-artifact@v5
         with:
-          name: builds
-          path: |
-            homevision_unpacker
-            frontend/main.wasm
+          name: wasm
+          path: frontend/main.wasm

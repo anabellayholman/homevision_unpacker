@@ -1,19 +1,16 @@
 package business
 
 import (
-	"path/filepath"
 	"testing"
 
 	cli "github.com/anabellayholman/homevision_unpacker/pkg/cli"
 )
 
 func TestBusinessRulesOnSample(t *testing.T) {
-	envPath := filepath.Join("tests", "sample.env")
-	files, err := cli.ParseEnv(envPath)
+	files, err := cli.ParseEnv("tests/fixtures/sample.env")
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-
 	names := make(map[string]bool)
 	for i, f := range files {
 		if f.Name == "" {
@@ -23,7 +20,6 @@ func TestBusinessRulesOnSample(t *testing.T) {
 			t.Fatalf("duplicate name %s", f.Name)
 		}
 		names[f.Name] = true
-
 		if f.Size == 0 {
 			t.Fatalf("zero size for %s", f.Name)
 		}

@@ -140,7 +140,7 @@ func parseContainerFormat(b []byte) ([]File, error) {
 			}
 			continue
 		}
-		// If none of the above, try to detect embedded binary inside the part
+	
 		if idx := indexBinarySignature(part); idx >= 0 {
 			bin := part[idx:]
 			attachBinaryPart(bin, filesByGUID, &order, &lastGUID)
@@ -232,13 +232,13 @@ func looksMostlyBinary(b []byte) bool {
 
 func indexBinarySignature(b []byte) int {
 	sigs := [][]byte{
-		[]byte{0xFF, 0xD8, 0xFF},        // JPEG
-		[]byte{0x89, 'P', 'N', 'G'},     // PNG
-		[]byte{'R', 'I', 'F', 'F'},      // RIFF/WEBP/WAV
-		[]byte{'P', '%', 'P', 'S'},      // PostScript (rare)
-		[]byte{'%', 'P', 'D', 'F'},      // PDF
-		[]byte{'B', 'M'},                // BMP
-		[]byte{'W', 'E', 'B', 'P'},      // WEBP (inside RIFF)
+		[]byte{0xFF, 0xD8, 0xFF},       
+		[]byte{0x89, 'P', 'N', 'G'},   
+		[]byte{'R', 'I', 'F', 'F'},      
+		[]byte{'P', '%', 'P', 'S'},     
+		[]byte{'%', 'P', 'D', 'F'},     
+		[]byte{'B', 'M'},               
+		[]byte{'W', 'E', 'B', 'P'},      
 	}
 	for i := 0; i < len(b); i++ {
 		for _, s := range sigs {

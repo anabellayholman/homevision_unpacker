@@ -1,13 +1,28 @@
 package business
 
 import (
+	"crypto/sha1"
+	"fmt"
 	"testing"
-
-	cli "github.com/anabellayholman/homevision_unpacker/pkg/cli"
 )
 
+type File struct {
+	Name string
+	Size int
+	Hash string
+	Data []byte
+}
+
+func verifySHA1(f File) bool {
+	if f.Hash == "" {
+		return true
+	}
+	sum := sha1.Sum(f.Data)
+	return fmt.Sprintf("%x", sum) == f.Hash
+}
+
 func TestBusinessRulesOnSample(t *testing.T) {
-	files := []cli.File{
+	files := []File{
 		{
 			Name: "image1.jpg",
 			Size: 5,
@@ -37,7 +52,7 @@ func TestBusinessRulesOnSample(t *testing.T) {
 			t.Fatalf("zero size for %s", f.Name)
 		}
 
-		if f.Hash != "" && !cli.VerifySHA1(f) {
+		if f.Hash != "" && !verifySHA1(f) {
 			t.Fatalf("sha1 mismatch %s", f.Name)
 		}
 

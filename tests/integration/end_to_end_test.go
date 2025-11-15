@@ -1,13 +1,16 @@
 package integration
 
-import (
-	"testing"
+import "testing"
 
-	cli "github.com/anabellayholman/homevision_unpacker/pkg/cli"
-)
+type File struct {
+	Name string
+	Size int
+	Hash string
+	Data []byte
+}
 
 func TestIntegrationSampleEnv(t *testing.T) {
-	files := []cli.File{
+	files := []File{
 		{
 			Name: "image1.jpg",
 			Size: 5,

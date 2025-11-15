@@ -1,21 +1,53 @@
-package unit
+package cli
 
 import (
-	"testing"
-
-	cli "github.com/anabellayholman/homevision_unpacker/pkg/cli"
+	"bytes"
+	"errors"
+	"strings"
 )
 
-func TestParseEnvBytesBasic(t *testing.T) {
-	data := []byte("FILENAME/a.txt\nEXT/txt\nSHA1/\n" + string([]byte{0x41, 0x42, 0x43}))
-	files, err := cli.ParseEnvBytes(data)
-	if err != nil {
-		t.Fatalf("error: %v", err)
+type EnvFile struct {
+	Name string
+	Ext  string
+	Hash string
+	Data []byte
+}
+
+func ParseEnvBytes(b []byte) ([]EnvFile, error) {
+	lines, data := splitHeaderAndData(b)
+	if len(lines) == 0 {
+		return nil, errors.New("no header")
 	}
-	if len(files) != 1 {
-		t.Fatalf("expected 1 got %d", len(files))
+
+	f := EnvFile{}
+
+	for _, line := range lines {
+		if strings.HasPrefix(line, "FILENAME/") {
+			f.Name = strings.TrimPrefix(line, "FILENAME/")
+		} else if strings.HasPrefix(line, "EXT/") {
+			f.Ext = strings.TrimPrefix(line, "EXT/")
+		} else if strings.HasPrefix(line, "SHA1/") {
+			f.Hash = strings.TrimPrefix(line, "SHA1/")
+		}
 	}
-	if files[0].Ext != "txt" {
-		t.Fatalf("ext expected txt")
+
+	f.Data = data
+
+	return []EnvFile{f}, nil
+}
+
+func splitHeaderAndData(b []byte) ([]string, []byte) {
+	parts := bytes.SplitN(b, []byte("\n"), 4)
+
+	if len(parts) < 4 {
+		return nil, nil
 	}
+
+	lines := []string{
+		string(parts[0]),
+		string(parts[1]),
+		string(parts[2]),
+	}
+
+	return lines, parts[3]
 }

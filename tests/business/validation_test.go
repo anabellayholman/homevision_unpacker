@@ -1,13 +1,15 @@
 package business
 
 import (
+	"path/filepath"
 	"testing"
 
 	cli "github.com/anabellayholman/homevision_unpacker/pkg/cli"
 )
 
 func TestBusinessRulesOnSample(t *testing.T) {
-	files, err := cli.ParseEnv("tests/fixtures/sample.env")
+	samplePath := filepath.Join("tests", "fixtures", "sample.env")
+	files, err := cli.ParseEnv(samplePath)
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}

@@ -1,12 +1,18 @@
 package integration
 
 import (
-"testing"
-cli "github.com/anabellayholman/homevision_unpacker/pkg/cli"
+	"testing"
+
+	cli "github.com/anabellayholman/homevision_unpacker/pkg/cli"
 )
 
 func TestIntegrationSampleEnv(t *testing.T) {
-files, err := cli.ParseEnv("tests/sample.env")
-if err != nil { t.Fatalf("parse error: %v", err) }
-if len(files) == 0 { t.Fatal("no files extracted") }
+	files, err := cli.ParseEnv("tests/sample.env")
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
+	if len(files) == 0 {
+		t.Fatal("no files extracted")
+	}
 }
+

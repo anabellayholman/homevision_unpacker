@@ -6,7 +6,7 @@ cli "github.com/anabellayholman/homevision_unpacker/pkg/cli"
 )
 
 func TestBusinessRulesOnSample(t *testing.T) {
-files, err := cli.ParseEnv("../cli/sample.env")
+files, err := cli.ParseEnv("tests/sample.env")
 if err != nil { t.Fatalf("parse error: %v", err) }
 names := make(map[string]bool)
 for i, f := range files {
